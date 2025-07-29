@@ -1,0 +1,163 @@
+CREATE TABLE IF NOT EXISTS admin (
+  id_admin INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  nama VARCHAR(100) NOT NULL,
+
+);
+
+CREATE TABLE IF NOT EXISTS galery (
+  id_galery INT AUTO_INCREMENT PRIMARY KEY,
+  gambar VARCHAR(255) NOT NULL,
+  id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS berita (
+  id_berita INT AUTO_INCREMENT PRIMARY KEY,
+  gambar VARCHAR(255) NOT NULL,
+  judul VARCHAR(255) NOT NULL,
+  keterangan TEXT NOT NULL,
+  tanggal DATE NOT NULL,
+  id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+CREATE TABLE `kontak` (
+  `id_kontak` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `subjeck` VARCHAR(255) NOT NULL,
+  `message` TEXT NOT NULL,
+  `status` ENUM('baru','dibaca') DEFAULT 'baru',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_kontak`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS struktur (
+  id_struktur INT AUTO_INCREMENT PRIMARY KEY,
+  nama VARCHAR(100) NOT NULL,
+  jabatan VARCHAR(100) NOT NULL,
+  gambar VARCHAR(255) NOT NULL,
+  id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+CREATE TABLE sejarah ( 
+  id_sejarah INT AUTO_INCREMENT PRIMARY KEY, 
+  gambar VARCHAR(255), 
+  keterangan TEXT NOT NULL ,
+    id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+  );
+  CREATE TABLE visi (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    isi TEXT NOT NULL,
+      id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+CREATE TABLE misi (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    isi TEXT NOT NULL,
+      id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+CREATE TABLE pengumuman (
+    id_pengumuman INT PRIMARY KEY AUTO_INCREMENT,
+    judul VARCHAR(255),
+    keterangan TEXT,
+    tanggal DATE,
+      id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+
+CREATE TABLE kegiatan (
+    id_kegiatan INT PRIMARY KEY AUTO_INCREMENT,
+    nama_kegiatan VARCHAR(255),
+    keterangan TEXT,
+    tanggal_mulai DATE,
+    tanggal_selesai DATE,
+    lokasi VARCHAR(255),
+    gambar VARCHAR(255),
+      id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+
+CREATE TABLE umkm_desa (
+    id_umkm INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    keterangan TEXT NOT NULL,
+      id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+
+CREATE TABLE potensi_desa (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gambar VARCHAR(255) NOT NULL,
+    keterangan TEXT,
+      id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+
+CREATE TABLE banner (
+    id_banner INT AUTO_INCREMENT PRIMARY KEY,
+    gambar VARCHAR(255) NOT NULL,
+    judul VARCHAR(255) NOT NULL,
+    keterangan TEXT,
+      id_admin INT NOT NULL,
+  FOREIGN KEY (id_admin) REFERENCES admin(id_admin) ON DELETE CASCADE
+);
+
+CREATE TABLE pengguna (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    nik VARCHAR(20) UNIQUE NOT NULL,
+    tanggal_lahir DATE NOT NULL,
+    alamat TEXT NOT NULL,
+    no_hp VARCHAR(15) NOT NULL,
+    email VARCHAR(100) UNIQUE NULL,
+    password VARCHAR(255) NOT NULL
+);
+CREATE TABLE pengajuan_surat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_pengguna INT NOT NULL,
+    jenis_surat ENUM('Domisili', 'Tidak Mampu', 'Usaha', 'Belum Menikah', 'Tanah') NOT NULL,
+    status ENUM('Menunggu Verifikasi', 'Diproses', 'Siap Diambil', 'Ditolak') DEFAULT 'Menunggu Verifikasi',
+    alasan_penolakan TEXT NULL,
+    tanggal_pengajuan TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tanggal_selesai TIMESTAMP NULL DEFAULT NULL,
+    FOREIGN KEY (id_pengguna) REFERENCES pengguna(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE detail_surat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_pengajuan INT NOT NULL,
+    nama_lengkap VARCHAR(100) NOT NULL,
+    tempat_lahir VARCHAR(100) NOT NULL,
+    tanggal_lahir DATE NOT NULL,
+    nik VARCHAR(20) NOT NULL,
+    alamat TEXT NOT NULL,
+    agama VARCHAR(20) NOT NULL,
+    pekerjaan VARCHAR(100) NULL,
+    keperluan TEXT NOT NULL,
+    status_pernikahan ENUM('Belum Menikah', 'Menikah', 'Duda', 'Janda') NULL,
+    jenis_usaha VARCHAR(255) NULL, -- Khusus Surat Usaha
+    status_tanah VARCHAR(255) NULL, -- Khusus Surat Tanah
+    luas_tanah DECIMAL(10,2) NULL, -- Tambahan untuk luas tanah
+    letak_tanah TEXT NULL, -- Lokasi tanah
+    status_kepemilikan ENUM('Pribadi', 'Warisan', 'Hak Guna', 'Sewa') NULL, -- Jenis kepemilikan tanah
+    bukti_kepemilikan VARCHAR(255) NULL, -- File sertifikat atau bukti lainnya
+    batas_utara VARCHAR(255) NULL, -- Batas tanah sebelah utara
+    batas_selatan VARCHAR(255) NULL, -- Batas tanah sebelah selatan
+    batas_timur VARCHAR(255) NULL, -- Batas tanah sebelah timur
+    batas_barat VARCHAR(255) NULL, -- Batas tanah sebelah barat
+    file_pendukung VARCHAR(255) NULL, -- File seperti KTP/KK
+    FOREIGN KEY (id_pengajuan) REFERENCES pengajuan_surat(id) ON DELETE CASCADE
+);
