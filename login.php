@@ -184,6 +184,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             /* Darker gray on hover */
             border-color: #545b62;
         }
+
+        .forgot-password-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #0d6efd;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-password-link:hover {
+            color: #0a58ca;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -210,6 +225,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" class="btn btn-success">Login</button>
                 <a href="slampang.php" class="btn btn-secondary">Kembali</a>
             </div>
+            <a href="reset_password.php" class="forgot-password-link">Lupa Password?</a>
         </form>
     </div>
 
